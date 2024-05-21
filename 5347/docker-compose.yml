@@ -1,0 +1,27 @@
+version: "3"
+services:
+  backend:
+    build: ./backend 
+    restart: always
+    ports:
+      - "8084:8084"
+    working_dir: /backend
+    environment:
+      - TZ=Asia/Shanghai
+      - MONGO_USERNAME=cblvan
+      - MONGO_PASSWORD=zSc8uBJ4JaLkiep
+    entrypoint: node server.js
+  frontend:
+    image: nginx
+    restart: always
+    depends_on:
+      - backend
+    links:
+      - backend
+    ports:
+      - "8083:80"
+    volumes:
+      - ./frontend/conf.d:/etc/nginx/conf.d
+      - ./frontend/html:/usr/share/nginx/html
+    environment:
+      - TZ=Asia/Shanghai
